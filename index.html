@@ -16,7 +16,7 @@
 <meta property="og:description" content="Offense informs defense. Penetration testing, red team operations and security tooling.">
 <meta name="twitter:card" content="summary">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0708'/%3E%3Cpath d='M16 5l9 4v7c0 5.5-3.8 9.3-9 11-5.2-1.7-9-5.5-9-11V9z' fill='none' stroke='%23ff4055' stroke-width='2.2' stroke-linejoin='round'/%3E%3Cpath d='M12 16h8M16 12v8' stroke='%23ff4055' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0708'/%3E%3Cpath d='M16 3.2c-4.9 2-8 6-8 11 0 2 .5 3.6 1.4 5L5 27h22l-4.4-7.8c.9-1.4 1.4-3 1.4-5 0-5-3.1-9-8-11z' fill='%231f1216' stroke='%23ff4055' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M16 8.2c-2.9 1.1-4.8 3.3-4.8 6 0 3.2 2 5.6 4.8 6.8 2.8-1.2 4.8-3.6 4.8-6.8 0-2.7-1.9-4.9-4.8-6z' fill='%23050203'/%3E%3Cpath d='M12.2 13.2 15.2 14.6 14.8 15.8 12.2 14.8zM19.8 13.2 16.8 14.6 17.2 15.8 19.8 14.8z' fill='%23ff4055'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +37,7 @@
 }
 </script>
 
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js')</script>
 <style>
 /* ==========================================================
    TOKENS
@@ -79,6 +80,7 @@ body{
   overflow-x:hidden;
 }
 img,svg{display:block;max-width:100%}
+main{overflow-x:clip}
 a{color:inherit;text-decoration:none}
 ul,ol{list-style:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -112,7 +114,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav.scrolled{background:rgba(12,7,8,.82);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-color:var(--line)}
 .nav-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
 .brand{display:flex;align-items:center;gap:.65rem;font-weight:700;letter-spacing:-.01em}
-.brand svg{width:26px;height:26px}
+.brand svg{width:30px;height:30px}
+.brand .eye{transition:filter .25s}
+.brand:hover .eye{filter:drop-shadow(0 0 3px #ff4055)}
 .nav-links{display:flex;align-items:center;gap:.4rem}
 .nav-links a{padding:.45rem .85rem;border-radius:999px;color:var(--mute);font-size:.95rem;font-weight:500;transition:color .2s,background .2s}
 .nav-links a:hover{color:var(--bone)}
@@ -248,51 +252,61 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media(pointer:coarse){.term-row input{font-size:16px}}
 
 /* ==========================================================
-   CERTIFICATIONS STRIP
+   CERTIFICATIONS
    ========================================================== */
-.creds{border-block:1px solid var(--line);background:linear-gradient(180deg,var(--ink-2),var(--ink))}
-.creds-grid{display:grid;grid-template-columns:repeat(3,1fr)}
-.cred{display:flex;align-items:center;gap:1.1rem;padding:2rem 1.5rem}
-.cred + .cred{border-left:1px solid var(--line)}
-.cred svg{width:58px;height:66px;flex:none}
-.cred h3{font-size:1.02rem;font-weight:600;line-height:1.3;margin-bottom:.15rem}
-.cred p{font-size:.88rem;color:var(--mute)}
-@media(max-width:820px){
-  .creds-grid{grid-template-columns:1fr}
-  .cred{padding:1.4rem 0}
-  .cred + .cred{border-left:0;border-top:1px solid var(--line)}
-}
+.cert-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem}
+.cert{--accent:var(--red);--glow:rgba(255,64,85,.13);gap:1.1rem}
+.cert .badge{width:78px;height:88px;transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s}
+.cert:hover .badge{transform:translateY(-5px) rotate(-5deg);filter:drop-shadow(0 0 16px rgba(255,64,85,.55))}
+.cert h3{font-size:1.3rem}
+@media(max-width:820px){.cert-grid{grid-template-columns:1fr}}
 
 /* ==========================================================
-   ATTACK CHAIN (skills)
+   SCROLL REVEAL (only active when JS is on and motion is allowed)
    ========================================================== */
-.chain{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1.25rem;position:relative}
-.chain::before{content:"";position:absolute;top:1.2rem;left:1.2rem;right:1.2rem;height:2px;background:linear-gradient(90deg,var(--red),rgba(255,64,85,.12))}
-.stage-n{
-  position:relative;z-index:1;width:2.4rem;height:2.4rem;border-radius:50%;
-  display:grid;place-items:center;background:var(--ink);border:2px solid var(--red);
-  font:700 .85rem var(--font-mono);color:var(--red);
+.js .rv{
+  opacity:0;
+  transform:translate3d(var(--x,0px),var(--y,38px),0) scale(var(--s,1));
+  transition:opacity .85s cubic-bezier(.2,.7,.15,1) var(--d,0s),transform .85s cubic-bezier(.2,.7,.15,1) var(--d,0s),border-color .25s;
+  will-change:opacity,transform;
 }
-.stage h3{margin:1.1rem 0 .2rem;font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
-.stage .aim{font-size:.85rem;color:#7d6b70;margin-bottom:.8rem;line-height:1.4}
-.stage ul{display:grid;gap:.3rem;color:var(--mute);font-size:.93rem}
-.stage li::before{content:"";display:inline-block;width:5px;height:5px;margin:0 .55rem .12rem 0;background:var(--red);border-radius:1px;opacity:.75}
+.js .rv.in{opacity:1;transform:none}
+.rv-left{--x:-90px;--y:0px}
+.rv-right{--x:90px;--y:0px}
+.rv-zoom{--y:26px;--s:.94}
+@media(max-width:940px){.rv-left{--x:-36px}.rv-right{--x:36px}}
 
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:clamp(2.5rem,5vw,3.5rem)}
-.panel{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.6rem}
-.panel.def{border-top:2px solid var(--teal)}
-.panel.neutral{border-top:2px solid var(--line-2)}
-.panel h3{font-size:1.15rem;font-weight:700;margin-bottom:.35rem}
-.panel > p{color:var(--mute);font-size:.95rem;margin-bottom:1.1rem}
+/* section headings draw their underline as they arrive */
+.section-head h2::after{content:"";display:block;width:56px;height:3px;border-radius:2px;background:var(--red);margin-top:.75rem;box-shadow:0 0 14px rgba(255,64,85,.6);transition:width .9s cubic-bezier(.2,.7,.2,1) .35s}
+.js .section-head.rv:not(.in) h2::after{width:0}
 
-@media(max-width:960px){
-  .chain{grid-template-columns:1fr;gap:1.6rem}
-  .chain::before{top:1.2rem;bottom:1.2rem;left:1.2rem;right:auto;width:2px;height:auto;background:linear-gradient(180deg,var(--red),rgba(255,64,85,.12))}
-  .stage{display:grid;grid-template-columns:2.4rem 1fr;column-gap:1.1rem;align-items:start}
-  .stage-n{grid-row:1 / span 3}
-  .stage h3{margin:.1rem 0 .1rem}
-  .duo{grid-template-columns:1fr}
-}
+/* pieces inside a revealed card arrive one after another */
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.92)}}
+@keyframes slidein{from{opacity:0;transform:translateX(-18px)}}
+.js .rv.in .chip.sk{animation:pop .55s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(.35s + var(--i,0) * .06s)}
+.js .rv.in .pipe div{animation:slidein .6s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(.5s + var(--i,0) * .16s)}
+.pipe div:nth-child(2){--i:1}.pipe div:nth-child(3){--i:2}.pipe div:nth-child(4){--i:3}
+
+/* ==========================================================
+   SKILLS
+   ========================================================== */
+.skill-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.25rem}
+.s-5{grid-column:span 5}
+.s-6{grid-column:span 6}
+.s-7{grid-column:span 7}
+.skill{--accent:var(--red);--glow:rgba(255,64,85,.12);gap:1.15rem;min-height:15rem}
+.skill-head{display:flex;align-items:center;gap:.9rem}
+.ico{width:46px;height:46px;flex:none;border-radius:13px;display:grid;place-items:center;color:var(--red);background:var(--red-soft);border:1px solid rgba(255,64,85,.32);transition:transform .3s,box-shadow .3s}
+.ico svg{width:23px;height:23px}
+.skill:hover .ico{transform:rotate(-6deg) scale(1.06);box-shadow:0 0 24px -4px rgba(255,64,85,.6)}
+.skill h3{font-size:1.3rem;letter-spacing:-.015em}
+.skill .sum{font-size:.95rem}
+.skill .chips{gap:.55rem;margin-top:auto}
+.chip.sk{font-size:.8rem;padding:.55rem .85rem;color:var(--bone);background:var(--ink-3);border-color:var(--line-2);transition:color .2s,border-color .2s,background .2s,transform .2s}
+.chip.sk:hover{color:var(--red);border-color:var(--red);background:var(--red-soft);transform:translateY(-2px)}
+.wm{position:absolute;right:-1.4rem;bottom:-1.6rem;width:10.5rem;height:10.5rem;color:var(--red);opacity:.05;z-index:-1;pointer-events:none;transition:opacity .4s,transform .5s}
+.skill:hover .wm{opacity:.11;transform:rotate(-8deg) scale(1.05)}
+@media(max-width:940px){.skill-grid > .skill{grid-column:1 / -1;min-height:0}}
 
 /* ==========================================================
    PROJECTS
@@ -362,21 +376,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    ========================================================== */
 .contact{position:relative;isolation:isolate;overflow:hidden;border-top:1px solid var(--line)}
 .contact::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(760px 420px at 12% 0%,rgba(255,64,85,.11),transparent 65%)}
-.contact h2{font-size:clamp(2.2rem,6vw,4.4rem);font-weight:700;line-height:1;letter-spacing:-.035em;max-width:14ch}
-.contact .lede{color:var(--mute);max-width:36rem;margin:1.2rem 0 2rem;font-size:1.12rem}
-.big-mail{display:inline-block;font-size:clamp(1.25rem,4.2vw,2.5rem);font-weight:600;letter-spacing:-.02em;overflow-wrap:anywhere;border-bottom:2px solid var(--red);padding-bottom:.15rem;transition:color .2s}
-.big-mail:hover{color:var(--red)}
-.contact-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1.75rem 0 3rem}
-.contact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+.contact-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:0 0 2rem}
+.contact-grid{display:grid;grid-template-columns:1.5fr .95fr .95fr 1.35fr;gap:1rem}
 .contact-grid a{display:flex;flex-direction:column;gap:.35rem;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r-md);padding:1.1rem 1.2rem;transition:border-color .2s,transform .2s}
 .contact-grid a:hover{border-color:var(--red);transform:translateY(-3px)}
 .contact-grid svg{width:20px;height:20px;color:var(--red)}
 .contact-grid small{color:var(--mute);font-size:.82rem}
-.contact-grid span{font-size:.92rem;overflow-wrap:anywhere;line-height:1.35}
+.contact-grid span{font-size:.9rem;overflow-wrap:anywhere;line-height:1.35}
 @media(max-width:940px){.contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.contact-grid{grid-template-columns:1fr}}
-.open-to{margin-top:2.5rem}
-.open-to p{color:var(--mute);font-size:.95rem;margin-bottom:.75rem}
 
 /* ==========================================================
    FOOTER + TOAST
@@ -414,6 +422,12 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
     <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
     <symbol id="hex" viewBox="0 0 64 72"><path d="M32 3 60 19v34L32 69 4 53V19z" fill="rgba(255,64,85,.10)" stroke="#ff4055" stroke-width="2" stroke-linejoin="round"/><path d="M32 11 53 23v26L32 61 11 49V23z" fill="none" stroke="rgba(255,64,85,.35)" stroke-width="1"/></symbol>
   </defs>
 </svg>
@@ -422,11 +436,12 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a href="#top" class="brand" aria-label="Muhammad Abdullah, back to top">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#130b0d" stroke="#402830"/><path d="M16 5l9 4v7c0 5.5-3.8 9.3-9 11-5.2-1.7-9-5.5-9-11V9z" fill="none" stroke="#ff4055" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 16h8M16 12v8" stroke="#ff4055" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#130b0d" stroke="#402830"/><path d="M16 3.2c-4.9 2-8 6-8 11 0 2 .5 3.6 1.4 5L5 27h22l-4.4-7.8c.9-1.4 1.4-3 1.4-5 0-5-3.1-9-8-11z" fill="#1f1216" stroke="#ff4055" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 8.2c-2.9 1.1-4.8 3.3-4.8 6 0 3.2 2 5.6 4.8 6.8 2.8-1.2 4.8-3.6 4.8-6.8 0-2.700-1.9-4.9-4.8-6z" fill="#050203"/><path class="eye" d="M12.2 13.2 15.2 14.6 14.8 15.8 12.2 14.8zM19.8 13.2 16.8 14.6 17.2 15.8 19.8 14.8z" fill="#ff4055"/><path d="M14.2 17.8l1.8 1.2 1.8-1.2" fill="none" stroke="#ff4055" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg>
       Muhammad Abdullah
     </a>
     <nav class="nav-links" id="nav-links" aria-label="Primary">
       <a href="#skills">Skills</a>
+      <a href="#certs">Certs</a>
       <a href="#work">Projects</a>
       <a href="#experience">Experience</a>
       <a href="#contact">Contact</a>
@@ -480,80 +495,77 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
   </div>
 </section>
 
-<!-- CERTIFICATIONS -->
-<section class="creds" id="certs" aria-label="Certifications">
-  <div class="wrap creds-grid">
-    <div class="cred">
-      <svg viewBox="0 0 64 72" role="img" aria-label="CRTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#ff4055">CRTA</text></svg>
-      <div><h3>Certified Red Team Analyst</h3><p>CyberWarFare Labs</p></div>
+<!-- SKILLS -->
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="section-head rv">
+      <h2>Skills</h2>
+      <p>What I use to find weaknesses, prove they're real, and explain how to fix them.</p>
     </div>
-    <div class="cred">
-      <svg viewBox="0 0 64 72" role="img" aria-label="Web-RTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#ff4055">WebRTA</text></svg>
-      <div><h3>Certified Web Red Team Analyst</h3><p>CyberWarFare Labs</p></div>
-    </div>
-    <div class="cred">
-      <svg viewBox="0 0 64 72" role="img" aria-label="MCRTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" fill="#ff4055">MCRTA</text></svg>
-      <div><h3>Multi-Cloud Red Team Analyst</h3><p>CyberWarFare Labs</p></div>
+    <div class="skill-grid">
+      <article class="card skill rv rv-zoom s-5">
+        <svg class="wm" aria-hidden="true"><use href="#i-target"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-target"/></svg></span><h3>Offensive Security</h3></div>
+        <p class="sum">Simulating real attackers from first foothold to full compromise.</p>
+        <div class="chips"><span class="chip sk">Penetration Testing</span><span class="chip sk">Red Team Ops</span><span class="chip sk">Privilege Escalation</span><span class="chip sk">Vulnerability Assessment</span></div>
+      </article>
+      <article class="card skill rv rv-zoom s-7">
+        <svg class="wm" aria-hidden="true"><use href="#i-globe"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-globe"/></svg></span><h3>Web Security</h3></div>
+        <p class="sum">Finding and exploiting flaws in web applications, and knowing the controls that stop them.</p>
+        <div class="chips"><span class="chip sk">OWASP Top 10</span><span class="chip sk">Burp Suite</span><span class="chip sk">XSS</span><span class="chip sk">SQL Injection</span><span class="chip sk">CSRF</span><span class="chip sk">CSP</span><span class="chip sk">Session Attacks</span></div>
+      </article>
+      <article class="card skill rv rv-zoom s-7">
+        <svg class="wm" aria-hidden="true"><use href="#i-terminal"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-terminal"/></svg></span><h3>Exploit Tools</h3></div>
+        <p class="sum">The toolbelt I reach for during an engagement.</p>
+        <div class="chips"><span class="chip sk">Metasploit</span><span class="chip sk">Burp Suite</span><span class="chip sk">Nmap</span><span class="chip sk">Ncat</span><span class="chip sk">SQLmap</span><span class="chip sk">Mimikatz</span><span class="chip sk">LinPEAS</span></div>
+      </article>
+      <article class="card skill rv rv-zoom s-5">
+        <svg class="wm" aria-hidden="true"><use href="#i-code"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-code"/></svg></span><h3>Programming</h3></div>
+        <p class="sum">Languages I use to build my own tools.</p>
+        <div class="chips"><span class="chip sk">Python</span><span class="chip sk">C/C++</span><span class="chip sk">Bash/Shell</span><span class="chip sk">Django</span></div>
+      </article>
+      <article class="card skill rv rv-zoom s-6">
+        <svg class="wm" aria-hidden="true"><use href="#i-cloud"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-cloud"/></svg></span><h3>Cloud &amp; Platforms</h3></div>
+        <p class="sum">Where I run attacks, and what I attack.</p>
+        <div class="chips"><span class="chip sk">Multi-Cloud Red Team</span><span class="chip sk">Kali Linux</span><span class="chip sk">Ubuntu</span><span class="chip sk">Windows Server</span><span class="chip sk">Active Directory</span></div>
+      </article>
+      <article class="card skill rv rv-zoom s-6">
+        <svg class="wm" aria-hidden="true"><use href="#i-users"/></svg>
+        <div class="skill-head"><span class="ico"><svg aria-hidden="true"><use href="#i-users"/></svg></span><h3>Soft Skills</h3></div>
+        <p class="sum">How findings turn into fixes people act on.</p>
+        <div class="chips"><span class="chip sk">Security Report Writing</span><span class="chip sk">Team Collaboration</span><span class="chip sk">Problem Solving</span><span class="chip sk">Technical Communication</span></div>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- SKILLS: the attack chain -->
-<section class="section" id="skills">
+<!-- CERTIFICATIONS -->
+<section class="section" id="certs">
   <div class="wrap">
-    <div class="section-head">
-      <h2>How I work an engagement</h2>
-      <p>My toolkit, in the order an attack actually unfolds. The last stage is where the work turns into fixes.</p>
+    <div class="section-head rv">
+      <h2>Certifications</h2>
+      <p>Three red team certifications, all issued by CyberWarFare Labs.</p>
     </div>
-
-    <ol class="chain">
-      <li class="stage">
-        <span class="stage-n">1</span>
-        <h3>Recon</h3>
-        <p class="aim">Map the attack surface</p>
-        <ul><li>Nmap</li><li>Ncat</li><li>DNS enumeration</li><li>AutoRecon (my own)</li></ul>
-      </li>
-      <li class="stage">
-        <span class="stage-n">2</span>
-        <h3>Web attacks</h3>
-        <p class="aim">Break the application layer</p>
-        <ul><li>Burp Suite</li><li>OWASP Top 10</li><li>SQLmap</li><li>XSS, CSRF, SQL injection</li><li>Session attacks</li></ul>
-      </li>
-      <li class="stage">
-        <span class="stage-n">3</span>
-        <h3>Exploit</h3>
-        <p class="aim">Get a foothold</p>
-        <ul><li>Metasploit</li><li>Penetration testing</li><li>Vulnerability assessment</li></ul>
-      </li>
-      <li class="stage">
-        <span class="stage-n">4</span>
-        <h3>Escalate</h3>
-        <p class="aim">Move from user to owner</p>
-        <ul><li>Linux and Windows privilege escalation</li><li>LinPEAS</li><li>Mimikatz</li><li>Active Directory</li><li>Multi-cloud red teaming</li></ul>
-      </li>
-      <li class="stage">
-        <span class="stage-n">5</span>
-        <h3>Report</h3>
-        <p class="aim">Turn findings into fixes</p>
-        <ul><li>Security report writing</li><li>Technical communication</li><li>Team collaboration</li></ul>
-      </li>
-    </ol>
-
-    <div class="duo">
-      <div class="panel def">
-        <h3>The defensive side</h3>
-        <p>What I build into systems once I know how they break.</p>
-        <div class="chips">
-          <span class="chip teal">CSP headers</span><span class="chip teal">CSRF protection</span><span class="chip teal">Session hardening</span><span class="chip teal">RBAC</span><span class="chip teal">Security logging</span><span class="chip teal">UEBA</span><span class="chip teal">DNS forensics</span><span class="chip teal">Explainable AI</span>
-        </div>
-      </div>
-      <div class="panel neutral">
-        <h3>Build and platforms</h3>
-        <p>Languages I write tools in, and the systems I work on.</p>
-        <div class="chips">
-          <span class="chip">Python</span><span class="chip">C/C++</span><span class="chip">Bash</span><span class="chip">Django</span><span class="chip">Flask</span><span class="chip">TypeScript</span><span class="chip">Kali Linux</span><span class="chip">Ubuntu</span><span class="chip">Windows Server</span>
-        </div>
-      </div>
+    <div class="cert-grid">
+      <article class="card cert rv rv-zoom">
+        <svg class="badge" viewBox="0 0 64 72" role="img" aria-label="CRTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#ff4055">CRTA</text></svg>
+        <div><h3>Certified Red Team Analyst</h3><p class="sum">Red team operations and adversary simulation.</p></div>
+        <div class="card-foot"><div class="chips"><span class="chip red">CRTA</span><span class="chip">CyberWarFare Labs</span></div></div>
+      </article>
+      <article class="card cert rv rv-zoom">
+        <svg class="badge" viewBox="0 0 64 72" role="img" aria-label="Web-RTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#ff4055">WebRTA</text></svg>
+        <div><h3>Certified Web Red Team Analyst</h3><p class="sum">Red teaming web applications.</p></div>
+        <div class="card-foot"><div class="chips"><span class="chip red">Web-RTA</span><span class="chip">CyberWarFare Labs</span></div></div>
+      </article>
+      <article class="card cert rv rv-zoom">
+        <svg class="badge" viewBox="0 0 64 72" role="img" aria-label="MCRTA badge"><use href="#hex"/><text x="32" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" fill="#ff4055">MCRTA</text></svg>
+        <div><h3>Multi-Cloud Red Team Analyst</h3><p class="sum">Red teaming across multi-cloud environments.</p></div>
+        <div class="card-foot"><div class="chips"><span class="chip red">MCRTA</span><span class="chip">CyberWarFare Labs</span></div></div>
+      </article>
     </div>
   </div>
 </section>
@@ -561,7 +573,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
 <!-- PROJECTS -->
 <section class="section" id="work" style="background:linear-gradient(180deg,transparent,var(--ink-2) 20%,var(--ink-2) 80%,transparent)">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head rv">
       <h2>Projects</h2>
       <p>One offensive tool and three defensive builds. The attacker's view shaped every one of them.</p>
       <div class="legend"><span><i></i>Offense</span><span class="t"><i></i>Defense</span></div>
@@ -569,7 +581,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
 
     <div class="work-grid">
 
-      <article class="card offense p-feature">
+      <article class="card offense p-feature rv rv-left">
         <span class="tag"><i></i>Offense</span>
         <h3>AutoRecon</h3>
         <p class="sum">A modular command-line recon framework that maps a target's attack surface, then asks an LLM which findings to chase first.</p>
@@ -590,7 +602,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
         </div>
       </article>
 
-      <article class="card defense p-side">
+      <article class="card defense p-side rv rv-right">
         <span class="tag"><i></i>Defense</span>
         <h3>Secure Banking Web App</h3>
         <p class="sum">A Django banking application where every layer has a defensive control: sessions, input, transport and access.</p>
@@ -605,7 +617,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
         </div>
       </article>
 
-      <article class="card defense p-half">
+      <article class="card defense p-half rv rv-left">
         <span class="tag"><i></i>Defense</span>
         <h3>AI and UEBA Fraud Detection</h3>
         <p class="sum">An autoencoder that learns what normal card transactions look like and flags the ones that aren't, with an explanation for each flag.</p>
@@ -620,7 +632,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
         </div>
       </article>
 
-      <article class="card defense p-half">
+      <article class="card defense p-half rv rv-right">
         <span class="tag"><i></i>Defense</span>
         <h3>DNS Tunneling Detection</h3>
         <p class="sum">Forensic analysis of DNS captures that surfaces the domains behaving like a covert channel.</p>
@@ -643,8 +655,8 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
 <section class="section" id="experience">
   <div class="wrap split">
     <div>
-      <div class="section-head" style="margin-bottom:1.75rem"><h2>Experience</h2></div>
-      <article class="role">
+      <div class="section-head rv" style="margin-bottom:1.75rem"><h2>Experience</h2></div>
+      <article class="role rv rv-left">
         <h4>Red Team Intern</h4>
         <p class="meta">Securely Innovations (Pvt) Ltd., Islamabad &nbsp;·&nbsp; July to August 2024</p>
         <ul class="points">
@@ -656,10 +668,10 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
       </article>
     </div>
     <div>
-      <div class="section-head" style="margin-bottom:1.75rem"><h2>Education</h2></div>
+      <div class="section-head rv" style="margin-bottom:1.75rem"><h2>Education</h2></div>
       <ul class="edu">
-        <li><b>BS Cybersecurity</b><span>Air University, Islamabad</span><em>2022 to 2026</em></li>
-        <li><b>FSc Pre-Engineering</b><span>Punjab Group of Colleges, Lahore</span><em>2020 to 2022</em></li>
+        <li class="rv rv-right"><b>BS Cybersecurity</b><span>Air University, Islamabad</span><em>2022 to 2026</em></li>
+        <li class="rv rv-right"><b>FSc Pre-Engineering</b><span>Punjab Group of Colleges, Lahore</span><em>2020 to 2022</em></li>
       </ul>
     </div>
   </div>
@@ -668,25 +680,21 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
 <!-- CONTACT -->
 <section class="section contact" id="contact">
   <div class="wrap">
-    <h2>Have something that needs testing?</h2>
-    <p class="lede">I'm looking for a red team or penetration testing role. If you're building a team, running a CTF or want a second pair of eyes on a system, write to me.</p>
+    <div class="section-head">
+      <h2>Contact</h2>
+      <p>Open to red team roles, penetration testing, security assessments, research collaborations and CTF team invitations.</p>
+    </div>
 
-    <a class="big-mail" href="mailto:m.abdullah186565@gmail.com">m.abdullah186565@gmail.com</a>
-    <div class="contact-actions">
+    <div class="contact-actions rv">
       <button class="btn btn-primary" id="copy-mail" type="button"><svg><use href="#i-copy"/></svg>Copy email</button>
       <a class="btn btn-ghost" href="https://linkedin.com/in/muhammad-abdullah-498108320" target="_blank" rel="noopener"><svg><use href="#i-linkedin"/></svg>Message on LinkedIn</a>
     </div>
 
     <div class="contact-grid">
-      <a href="mailto:m.abdullah186565@gmail.com"><svg><use href="#i-mail"/></svg><small>Email</small><span>m.abdullah186565@gmail.com</span></a>
-      <a href="tel:+923240503985"><svg><use href="#i-phone"/></svg><small>Phone</small><span>+92 324 0503985</span></a>
-      <a href="https://github.com/n0n3tt0Tech" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg><small>GitHub</small><span>n0n3tt0Tech</span></a>
-      <a href="https://linkedin.com/in/muhammad-abdullah-498108320" target="_blank" rel="noopener"><svg><use href="#i-linkedin"/></svg><small>LinkedIn</small><span>muhammad-abdullah-498108320</span></a>
-    </div>
-
-    <div class="open-to">
-      <p>Open to</p>
-      <div class="chips"><span class="chip red">Red team roles</span><span class="chip red">Penetration testing</span><span class="chip red">Security assessments</span><span class="chip red">Research collaborations</span><span class="chip red">CTF team invitations</span></div>
+      <a class="rv rv-zoom" href="mailto:m.abdullah186565@gmail.com"><svg><use href="#i-mail"/></svg><small>Email</small><span>m.abdullah186565@gmail.com</span></a>
+      <a class="rv rv-zoom" href="tel:+923240503985"><svg><use href="#i-phone"/></svg><small>Phone</small><span>+92 324 0503985</span></a>
+      <a class="rv rv-zoom" href="https://github.com/n0n3tt0Tech" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg><small>GitHub</small><span>n0n3tt0Tech</span></a>
+      <a class="rv rv-zoom" href="https://linkedin.com/in/muhammad-abdullah-498108320" target="_blank" rel="noopener"><svg><use href="#i-linkedin"/></svg><small>LinkedIn</small><span>muhammad-abdullah-498108320</span></a>
     </div>
   </div>
 </section>
@@ -771,8 +779,28 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
         }
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    ['skills', 'work', 'experience', 'contact'].forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+    ['skills', 'certs', 'work', 'experience', 'contact'].forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
   }
+
+  /* ---------- scroll reveal ---------- */
+  (function reveal() {
+    const els = $$('.rv');
+    const on = document.documentElement.classList.contains('js');
+    if (!on || !('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+    $$('.skill .chips').forEach(c => Array.from(c.children).forEach((ch, i) => ch.style.setProperty('--i', i)));
+    const io = new IntersectionObserver(entries => {
+      entries.filter(e => e.isIntersecting).forEach((en, i) => {
+        const el = en.target;
+        io.unobserve(el);
+        const delay = i * 0.14; // items entering together arrive one after another
+        el.style.setProperty('--d', delay + 's');
+        requestAnimationFrame(() => el.classList.add('in'));
+        // hand the element back to its normal hover styles once it has arrived
+        setTimeout(() => { el.classList.remove('rv', 'in'); el.style.removeProperty('--d'); }, 2600 + delay * 1000);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(e => io.observe(e));
+  })();
 
   /* ---------- project card spotlight ---------- */
   $$('.card').forEach(card => {
@@ -973,7 +1001,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
       help() {
         return [
           kv('whoami', 'who I am'),
-          kv('skills', 'the attack chain, stage by stage'),
+          kv('skills', 'tools and techniques'),
           kv('certs', 'certifications'),
           kv('projects', 'what I have built'),
           kv('experience', 'work history'),
@@ -998,13 +1026,12 @@ footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--mute);
       about() { return commands.whoami(); },
       skills() {
         return [
-          kv('recon', 'Nmap, Ncat, DNS enumeration, AutoRecon'),
-          kv('web', 'Burp Suite, OWASP Top 10, SQLmap, XSS, CSRF, sessions'),
-          kv('exploit', 'Metasploit, penetration testing, vulnerability assessment'),
-          kv('escalate', 'LinPEAS, Mimikatz, Linux and Windows privesc, Active Directory, multi-cloud'),
-          kv('report', 'security reports, technical communication'),
-          GAP,
-          kv('build', 'Python, C/C++, Bash, Django, Flask, TypeScript')
+          kv('offensive', 'penetration testing, red team ops, privilege escalation, vuln assessment', 11),
+          kv('web', 'OWASP Top 10, Burp Suite, XSS, SQLi, CSRF, CSP, session attacks', 11),
+          kv('tools', 'Metasploit, Burp Suite, Nmap, Ncat, SQLmap, Mimikatz, LinPEAS', 11),
+          kv('code', 'Python, C/C++, Bash, Django', 11),
+          kv('platforms', 'multi-cloud red team, Kali, Ubuntu, Windows Server, Active Directory', 11),
+          kv('soft', 'report writing, teamwork, problem solving, technical communication', 11)
         ];
       },
       certs() {
